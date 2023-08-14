@@ -9,14 +9,13 @@ protocol CoinManagerDelegate
 struct CoinManager {
     var delegate: CoinManagerDelegate?
     
-    let baseUrl = "https://rest.coinapi.io/v1/exchangerate/BTC"
-    let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY")
+    let baseUrl = "https://api.exchangerate.host/latest?base=BTC"
+    var currencyArray = ["AED","AUD","BHD","BRL","CAD","CNY","DZD","EGP","EUR","GBP","HKD","IDR","INR","IQD","JPY","KWD","LBP","LYD","MAD","MXN","NOK","NZD","PLN","QAR","RON","RUB","SAR","SEK","SGD","SYP","TND","USD","YAR","ZAR"]
     
-    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
-
     func getCoinPrice(for currency: String)
     {
-        let urlString = "\(baseUrl)/\(currency)?apikey=\(apiKey!)"
+        let urlString = "\(baseUrl)&symbols=\(currency)"
+        print(urlString)
         
         if let url = URL(string: urlString)
         {
@@ -30,13 +29,13 @@ struct CoinManager {
           
                 if let safeData = data
                 {
+//                    print(String(data: safeData, encoding: .utf8)!)
                     let decoder = JSONDecoder()
                     do
                     {
                         let decodedData = try decoder.decode(CoinData.self, from: safeData)
-                        let currency = decodedData.asset_id_quote
-                        let price = String(format: "%.2f", decodedData.rate)
-                        delegate?.didUpdatePrice(currency: currency, price: price)
+                        let priceString = String(format: "%.2f", decodedData.rates["\(currency)"]!)
+                        delegate?.didUpdatePrice(currency: currency, price: priceString)
                     }
                     catch
                     {
