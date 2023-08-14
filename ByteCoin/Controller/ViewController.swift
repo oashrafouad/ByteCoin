@@ -5,6 +5,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var bitcoinLabel: UILabel!
     @IBOutlet weak var currencyLabel: UILabel!
     @IBOutlet weak var currencyPicker: UIPickerView!
+    @IBOutlet weak var coinView: UIView!
     
     var coinManager = CoinManager()
     
@@ -21,8 +22,12 @@ extension ViewController: CoinManagerDelegate
 {
     func didUpdatePrice(currency: String, price: String) {
         DispatchQueue.main.async {
-            self.currencyLabel.text = currency
-            self.bitcoinLabel.text = price
+            UIView.transition(with: self.coinView, duration: 0.3, options: .transitionCrossDissolve)
+            {
+                self.bitcoinLabel.text = price
+                self.currencyLabel.text = currency
+                self.coinView.layoutIfNeeded()
+            }
         }
     }
     

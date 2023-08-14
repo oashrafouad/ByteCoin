@@ -15,7 +15,6 @@ struct CoinManager {
     func getCoinPrice(for currency: String)
     {
         let urlString = "\(baseUrl)&symbols=\(currency)"
-        print(urlString)
         
         if let url = URL(string: urlString)
         {
@@ -29,13 +28,14 @@ struct CoinManager {
           
                 if let safeData = data
                 {
-//                    print(String(data: safeData, encoding: .utf8)!)
                     let decoder = JSONDecoder()
                     do
                     {
                         let decodedData = try decoder.decode(CoinData.self, from: safeData)
-                        let priceString = String(format: "%.2f", decodedData.rates["\(currency)"]!)
-                        delegate?.didUpdatePrice(currency: currency, price: priceString)
+                        
+                        let formattedPrice = decodedData.rates["\(currency)"]!.commaRepresentation()
+                        
+                        delegate?.didUpdatePrice(currency: currency, price: formattedPrice)
                     }
                     catch
                     {
@@ -45,5 +45,17 @@ struct CoinManager {
             })
             task.resume()
         }
+    }
+}
+
+extension Double
+{
+    func commaRepresentation() -> String
+    {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 2
+        
+        return numberFormatter.string(from: NSNumber(floatLiteral: self))!
     }
 }
