@@ -10,7 +10,7 @@ struct CoinManager {
     var delegate: CoinManagerDelegate?
     
     let baseUrl = "https://api.exchangerate.host/latest?base=BTC"
-    var currencyArray = ["AED","AUD","BHD","BRL","CAD","CNY","DZD","EGP","EUR","GBP","HKD","IDR","INR","IQD","JPY","KWD","LBP","LYD","MAD","MXN","NOK","NZD","PLN","QAR","RON","RUB","SAR","SEK","SGD","SYP","TND","USD","YAR","ZAR"]
+    let currencyArray = ["AED","AUD","BHD","BRL","CAD","CNY","DZD","EGP","EUR","GBP","HKD","IDR","INR","IQD","JPY","KWD","LBP","LYD","MAD","MXN","NOK","NZD","PLN","QAR","RON","RUB","SAR","SEK","SGD","SYP","TND","USD","YAR","ZAR"]
     
     func getCoinPrice(for currency: String)
     {

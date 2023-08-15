@@ -32,7 +32,13 @@ extension ViewController: CoinManagerDelegate
     }
     
     func didFailWithError(error: Error) {
-        print(error)
+        let errorString = error.localizedDescription
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "Error", message: errorString, preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alertController.addAction(action)
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 }
 
